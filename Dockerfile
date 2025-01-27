@@ -18,6 +18,8 @@ WORKDIR "$HOME/dev"
 
 RUN n lts && n latest
 
+# RUN git clone ....
+
 RUN n exec lts npx create-next-app@latest site-ssr --app --src-dir --eslint --javascript --tailwind --turbopack --eslint --use-yarn --yes && \
     yarn --cwd site-ssr install
 
@@ -25,7 +27,10 @@ RUN n exec latest npx create-next-app@latest site-csr --app --src-dir --eslint -
     yarn --cwd site-csr install
 
 RUN n exec lts npx create-next-app@latest site-api --app --src-dir --eslint --javascript --tailwind --turbopack --eslint --use-yarn --yes && \
-    yarn --cwd site-api install
+    yarn --cwd site-api install \
+# composer ici pour l'api
+
+# install nginx pour proxy pass OU node proxy-server
 
 WORKDIR "$HOME"
 
@@ -36,3 +41,16 @@ ENV PATH="$HOME/.venv/bin:$PATH"
 COPY supervisord.conf supervisord.conf
 
 CMD [ "supervisord" ]
+
+
+
+#ticket : 4hh123h123-event
+
+#https://4hh123h123-event.mysmartjourney.com/
+#-≥ 127.0.0.1:3010
+
+#https://4hh123h123-event.mysmartjourney.com/api
+#-≥ 127.0.0.1:3020
+
+#https://4hh123h123-event.mysmartjourney.com/admin
+#-≥ 127.0.0.1:3020

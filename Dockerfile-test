@@ -1,0 +1,34 @@
+FROM ubuntu:22.04
+
+RUN apt update && apt install -y --no-install-recommends \
+        ca-certificates curl build-essential gcc git nano python3 python3-pip python3-venv && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN chsh -s /bin/bash www-data
+
+USER www-data
+
+ENV HOME="/var/www"
+
+ENV N_PREFIX="$HOME/.n"
+
+ENV PATH="$N_PREFIX/bin:$PATH"
+
+WORKDIR "$HOME"
+
+RUN curl -L https://bit.ly/n-install | bash -s -- -y
+
+RUN n install 20 && n install 22
+
+RUN corepack enable yarn
+
+WORKDIR "$HOME/dev"
+
+RUN n exec 20 npx create-next-app@latest site-ssr --app --src-dir --eslint --javascript --tailwind --turbopack --eslint --use-npm --yes && \
+    yarn --cwd site-ssr install
+
+RUN n exec 22 npx create-next-app@latest site-csr --app --src-dir --eslint --javascript --tailwind --turbopack --eslint --use-npm --yes && \
+    yarn --cwd site-csr install
+
+RUN n exec 20 npx create-next-app@latest site-api --app --src-dir --eslint --javascript --tailwind --turbopack --eslint --use-npm --yes && \
+    yarn --cwd site-api install
