@@ -31,4 +31,14 @@ RUN n exec 22 npx create-next-app@latest site-csr --app --src-dir --eslint --jav
     yarn --cwd site-csr install
 
 RUN n exec 20 npx create-next-app@latest site-api --app --src-dir --eslint --javascript --tailwind --turbopack --eslint --use-npm --yes && \
-    yarn --cwd site-api install
+    yarn --cwd site-api install  # Replace that by Symfony composer install
+
+WORKDIR "$HOME"
+
+RUN python3 -m venv .venv && . .venv/bin/activate && pip install supervisor
+
+ENV PATH="$HOME/.venv/bin:$PATH"
+
+COPY supervisord.conf supervisord.conf
+
+CMD [ "supervisord" ]

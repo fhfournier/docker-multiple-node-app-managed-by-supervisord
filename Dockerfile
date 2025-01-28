@@ -1,4 +1,4 @@
-FROM node:latest
+FROM ubuntu:22.04
 
 EXPOSE 9001
 
@@ -27,8 +27,7 @@ RUN n exec latest npx create-next-app@latest site-csr --app --src-dir --eslint -
     yarn --cwd site-csr install
 
 RUN n exec lts npx create-next-app@latest site-api --app --src-dir --eslint --javascript --tailwind --turbopack --eslint --use-yarn --yes && \
-    yarn --cwd site-api install \
-# composer ici pour l'api
+    yarn --cwd site-api install  # Replace that by Symfony composer install
 
 # install nginx pour proxy pass OU node proxy-server
 
